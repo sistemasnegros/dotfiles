@@ -1,5 +1,6 @@
 call plug#begin()
 
+" Auto complete
 if has('nvim')
   Plug 'Shougo/deoplete.nvim'
 else
@@ -8,27 +9,45 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
+" menu file
 Plug 'scrooloose/nerdtree'
-Plug 'easymotion/vim-easymotion'
-"Plug 'Shougo/neocomplete.vim'
 
 Plug 'prettier/vim-prettier', {'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html']}
+
+" Linter
 Plug 'w0rp/ale'
-Plug 'matze/vim-move'
-Plug 'terryma/vim-multiple-cursors'
+
+" Utils
 Plug 'SirVer/ultisnips'
-"Plug 'junegunn/fzf'
 Plug 'junegunn/fzf', {'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
-Plug 'pangloss/vim-javascript'
 Plug 'gorkunov/smartpairs.vim'
 Plug 'djoshea/vim-autoread'
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'ap/vim-buftabline'
+Plug 'easymotion/vim-easymotion'
+Plug 'cohama/lexima.vim'
+" Plug 'matze/vim-move'
 
-"Plug 'vim-python/python-syntax'
+" Plug 'jiangmiao/auto-pairs'
+"Plug 'terryma/vim-multiple-cursors'
+"Plug 'junegunn/fzf'
+
+" Emmet
+Plug 'mattn/emmet-vim'
+"javascript
+Plug 'pangloss/vim-javascript'
+" Plug 'mxw/vim-jsx'
+Plug 'maxmellon/vim-jsx-pretty'
+
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
+
+Plug 'carlitux/deoplete-ternjs', {'do': 'npm install -g tern'}
+
+" python
 Plug 'kh3phr3n/python-syntax'
 
 " Colour Themes
@@ -39,10 +58,14 @@ Plug 'kaicataldo/material.vim'
 Plug 'dracula/vim', {'as': 'dracula'}
 Plug 'patstockwell/vim-monokai-tasty'
 
+
 " Test Run
 Plug 'itchyny/lightline.vim'
 Plug 'alvan/vim-closetag'
-Plug 'carlitux/deoplete-ternjs', {'do': 'npm install -g tern'}
+Plug 'tpope/vim-commentary'
+Plug 'Galooshi/vim-import-js'
+"Plug 'tpope/vim-surround'
+
 
 " Initialize plugin system
 call plug#end()
@@ -61,7 +84,7 @@ syntax on
 " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 
-set cursorline  " hihgli line current
+"set cursorline  " hihgli line current
 set backspace=indent,eol,start
 set history=1000
 set ruler
@@ -165,12 +188,14 @@ endif
 let g:mapleader=' '  " Definir espacio como la tecla líder
 
 " save with control + s
-nnoremap <C-s> : w<CR>
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>i
 
 " Reload vims configuration file
 map <leader>vs :source $MYVIMRC<CR>
 "Vimrc configuration
 map <leader>vv :vsp $MYVIMRC<CR>
+map <leader>vj :vsp ~/.config/nvim/UltiSnips/javascript.snippets<CR>
 
 " create/open file in current folder
 map <Leader>ee :e <C-R>=escape(expand("%:p:h"),' ') . '/'<CR>
@@ -181,46 +206,96 @@ map <Leader>ee :e <C-R>=escape(expand("%:p:h"),' ') . '/'<CR>
 "nnoremap <C-M>: bprev <CR>
 
 " Moverse al buffer siguiente con < líder > + l
-nnoremap <leader><Right>: bnext<CR>
+nnoremap <leader><Right> :bnext<CR>
+" nnoremap <leader>l :bnext<CR>
 
 " Moverse al buffer anterior con < líder > + j
-nnoremap <leader><Left>: bprevious<CR>
+nnoremap <leader><Left> :bprevious<CR>
+" nnoremap <leader>j :bprevious<CR>
 
 " Cerrar el buffer actual con < líder > + q
-nnoremap <leader>q: bdelete<CR>
+nnoremap <leader>q :bdelete<CR>
 
  "Guardar con < líder > + s
-nnoremap <leader>s: w<CR>
+nnoremap <leader>s :w <CR>
 
-"Usar < líder > + y para copiar al portapapeles
-vnoremap <leader>y "+ y
-nnoremap <leader>y "+ y
+" Usar <líder> + y para copiar al portapapeles
+vnoremap <leader>y "+y
+nnoremap <leader>y "+y
 
-" Usar < líder > + d para cortar al portapapeles
-vnoremap <leader>d "+ d
-nnoremap <leader>d "+ d
+" Usar <líder> + d para cortar al portapapeles
+vnoremap <leader>d "+d
+nnoremap <leader>d "+d
 
-" Usar < líder > + p para pegar desde el portapapeles
-nnoremap <leader>p "+ p
-vnoremap <leader>p "+ p
-nnoremap <leader>P "+ P
-vnoremap <leader>P "+ P
+" Usar <líder> + p para pegar desde el portapapeles
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>P "+P
 
 "Vim move
-let g:move_key_modifier='C'
+"let g:move_key_modifier='C'
 "<C-k > Move current line/selections up
 "<C-j > Move current line/selections down
-nnoremap <C-Up>: move-2<CR>
-nnoremap <C-DOWN>: move+1<CR>
 
 
-let g:lexima_enable_basic_rules=1
+nnoremap <C-Up> : move-2<CR>
+nnoremap <C-DOWN> : move+1<CR>
 
+vnoremap <C-Up> :m '<-2<CR>gv=gv
+vnoremap <C-DOWN> :m '>+1<CR>gv=gv
+
+inoremap <C-UP> <Esc>:m .-2<CR>==gi
+inoremap <C-DOWN> <Esc>:m .+1<CR>==gi
+
+" Change word
+nnoremap <leader>w ciw
+nnoremap <leader>* *Nciw
+" resalta la linea palabra
+nnoremap <leader>n n.
+" remplace el text in selection
+nnoremap <leader>r yiw:%s/\<<C-r>"\>//g<left><left>
+" disable hl
+nnoremap <Leader><Enter> :nohl  <CR>
+
+"Insert \n
+nnoremap <Enter> i<CR><Esc>
+" Delete line
+nnoremap <Del> dd
+
+
+"nnoremap <silent> <space> :nohl<Bar>:echo<CR>
+" duplicate line
+nnoremap <leader>e mzyyp`zj
+"nnoremap <leader>v :set invpaste paste?<CR>
+"nnoremap <leader>V V`]
+"nnoremap <leader>I V`]=
+" select all
+nnoremap <leader>a ggVG
+"nnoremap <leader>r :syntax sync fromstart<CR>
+"nmap k gk
+"nmap j gj
+
+" tabulaciones
+vnoremap > >gv
+vnoremap < <gv
+
+
+"let g:lexima_enable_basic_rules=1
+" let g:lexima_enable_newline_rules=1
 
 " Use deoplete.
 let g:python3_host_prog='/usr/local/bin/python3.7'
 let g:deoplete#enable_at_startup=1
 
+"deoplete-ternjs
+
+"Add extra filetypes
+let g:deoplete#sources#ternjs#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ 'vue',
+                \ ]
 
 " NERDTree
 "nnoremap <leader> q: NERDTreeToggle <CR>
@@ -232,6 +307,7 @@ let NERDTreeQuitOnOpen=1
 let NERDTreeHijackNetrw=0
 let NERDTreeIgnore=['\.pyc$','\~$'] "ignore files in NERDTree
 let NERDTreeShowHidden=1
+" autocmd BufWritePost * NERDTreeFocus | execute 'normal R' | wincmd p
 
 " Lightline
 let g:lightline = { 'colorscheme': 'material_vim' }
@@ -256,11 +332,13 @@ let g:javascript_enable_domhtmlcss=1
 let g:used_javascript_libs='underscore,react'
 
 " Emmet
-" let g:user_emmet_settings={'javascript.jsx': {'extends': 'jsx'}}
-" let g:user_emmet_leader_key='<C-t>'
+" let g:user_emmet_settings={'javascript': {'extends': 'jsx'}}
+let g:user_emmet_leader_key='<C-t>'
+let g:user_emmet_install_global=0
+autocmd FileType html,css,jsx,javascript EmmetInstall
 
 " Tag Autoclose
-let g:closetag_filenames='*.html,*.xhtml,*.phtml,*.vue'
+let g:closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.js'
 
 " Layout switcher
 let g:XkbSwitchLib='/usr/local/lib/libInputSourceSwitcher.dylib'
@@ -301,7 +379,7 @@ let b:ale_fixers={
 \}
 " Disable warnings about trailing whitespace for Python files.
 "let b:ale_warn_about_trailing_whitespace=0
-"let g:ale_fix_on_save=1
+let g:ale_fix_on_save=1
 "let g:ale_lint_on_enter=0
 "let g:ale_lint_on_text_changed='never'
 "highlight ALEErrorSign ctermbg=NONE ctermfg=red
@@ -309,15 +387,39 @@ let b:ale_fixers={
 
 
 " FZF
-nnoremap <leader>f: GFiles<CR>
-nnoremap <leader>t: Files<CR>
-nnoremap <leader>.: Buffers<CR>
+nnoremap <leader>f :GFiles<CR>
+nnoremap <leader>t :Files<CR>
+nnoremap <leader>. :Buffers<CR>
+
+"vim-multiple-cursors
+"let g:multi_cursor_use_default_mapping=1
+
+" Default mappdding
+"let g:multi_cursor_start_word_key      = 'e'
+"let g:multi_cursor_select_all_word_key = '<A-n>'
+"let g:multi_cursor_start_key           = 'ge'
+"let g:multi_cursor_select_all_key      = 'g<A-n>'
+"let g:multi_cursor_next_key            = 'e'
+"let g:multi_cursor_prev_key            = '<C-p>'
+"let g:multi_cursor_skip_key            = '<C-x>'
+"let g:multi_cursor_quit_key            = '<Esc>'
+
+
+
+
 
 " CONTROL+P
-let g:ctrlp_map='<c-p>'
+"let g:ctrlp_map='<c-p>'
 let g:ctrlp_working_path_mode='ra'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*,*.git,*.hg,*.svn,*.DS_Store,._*,Thumbs.db,desktop.ini,.atom*,*.pyc,*_env
 "let g:ctrlp_mruf_case_sensitive=0
+let g:ctrlp_use_caching = 0
+
+
+"importjs
+" <Leader>j 	:ImportJSWord 	Import the module for the variable under the cursor.
+" <Leader>i 	:ImportJSFix 	Import any missing modules and remove any modules that are not used.
+" <Leader>g 	:ImportJSGoto 	Go to the module of the variable under the cursor.
 
 " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 "
