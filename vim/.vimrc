@@ -4,14 +4,9 @@ call plug#begin()
 " menu file
 Plug 'scrooloose/nerdtree'
 
-Plug 'prettier/vim-prettier', {'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html']}
-
-" Linter
-Plug 'w0rp/ale'
 
 " Utils
 Plug 'junegunn/fzf', {'do': './install --bin'}
-Plug 'junegunn/fzf.vim'
 Plug 'gorkunov/smartpairs.vim'
 Plug 'djoshea/vim-autoread'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -33,17 +28,18 @@ Plug 'kh3phr3n/python-syntax'
 " Colour Themes
 "Plug 'GertjanReynaert/cobalt2-vim-theme'
 "Plug 'altercation/vim-colors-solarized'
-Plug 'kaicataldo/material.vim'
+"Plug 'kaicataldo/material.vim'
 "Plug 'dracula/vim'
 "Plug 'dracula/vim', {'as': 'dracula'}
 "Plug 'patstockwell/vim-monokai-tasty'
+Plug 'tomasr/molokai'
 
 
 " Test Run
 Plug 'itchyny/lightline.vim'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-commentary'
-Plug 'Galooshi/vim-import-js'
+"Plug 'Galooshi/vim-import-js'
 
 
 " Initialize plugin system
@@ -152,7 +148,7 @@ if has("autocmd")
     au BufNewFile,BufReadPost *.md set filetype=markdown
     au BufNewFile,BufReadPost *.vue syntax sync fromstart
 
-    autocmd FileType javascript set formatprg=prettier\ --stdin
+    "autocmd FileType javascript set formatprg=prettier\ --stdin
     "autocmd BufLeave,FocusLost * silent! wall
     autocmd filetype crontab setlocal nobackup nowritebackup
 
@@ -182,18 +178,16 @@ map <Leader>ee :e <C-R>=escape(expand("%:p:h"),' ') . '/'<CR>
 
 
 " buffer move tab
-"nnoremap <C-K>: bnext <CR>
-"nnoremap <C-M>: bprev <CR>
 
-" Moverse al buffer siguiente con < líder > + l
+" Moverse al buffer siguiente
 nnoremap <leader><Right> :bnext<CR>
 " nnoremap <leader>l :bnext<CR>
 
-" Moverse al buffer anterior con < líder > + j
+" Moverse al buffer anterior
 nnoremap <leader><Left> :bprevious<CR>
 " nnoremap <leader>j :bprevious<CR>
 
-" Cerrar el buffer actual con < líder > + q
+" Cerrar el buffer actual
 nnoremap <leader>q :bdelete<CR>
 
  "Guardar con < líder > + s
@@ -213,6 +207,7 @@ vnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>P "+P
 
+"move lines
 nnoremap <C-Up> : move-2<CR>
 nnoremap <C-DOWN> : move+1<CR>
 
@@ -239,13 +234,15 @@ nnoremap <Del> dd
 
 
 "nnoremap <silent> <space> :nohl<Bar>:echo<CR>
-" duplicate line
-nnoremap <leader>e mzyyp`zj
 "nnoremap <leader>v :set invpaste paste?<CR>
 "nnoremap <leader>V V`]
 "nnoremap <leader>I V`]=
+
+" duplicate line
+nnoremap <leader>e mzyyp`zj
 " select all
 nnoremap <leader>a ggVG
+
 "nnoremap <leader>r :syntax sync fromstart<CR>
 "nmap k gk
 "nmap j gj
@@ -268,15 +265,15 @@ let NERDTreeShowHidden=1
 " autocmd BufWritePost * NERDTreeFocus | execute 'normal R' | wincmd p
 
 " Lightline
-let g:lightline = { 'colorscheme': 'material_vim' }
+"let g:lightline = { 'colorscheme': 'material_vim' }
 
 " Easymotion
 nmap S <Plug>(easymotion-s2)
 nmap s <Plug>(easymotion-s)
 
 " UltiSnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<tab>"
 
 " Vue
 " let g:vue_disable_pre_processors=1
@@ -299,25 +296,25 @@ autocmd FileType html,css,jsx,javascript EmmetInstall
 let g:closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.js'
 
 " Layout switcher
-let g:XkbSwitchLib='/usr/local/lib/libInputSourceSwitcher.dylib'
-let g:XkbSwitchEnabled=1
+"let g:XkbSwitchLib='/usr/local/lib/libInputSourceSwitcher.dylib'
+"let g:XkbSwitchEnabled=1
 
 " Prettier
-nmap <Leader>p <Plug>(Prettier)
-let g:prettier#exec_cmd_async=1
-let g:prettier#config#print_width=80
-let g:prettier#config#tab_width=2
-let g:prettier#config#use_tabs='false'
-let g:prettier#config#semi='true'
-let g:prettier#config#single_quote='false'
-let g:prettier#config#bracket_spacing='true'
-let g:prettier#config#jsx_bracket_same_line='false'
-let g:prettier#config#trailing_comma='none'
-let g:prettier#config#parser='babylon'
-let g:prettier#config#config_precedence='prefer-file'
-let g:prettier#config#prose_wrap='preserve'
-let g:prettier#autoformat=0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+" nmap <Leader>p <Plug>(Prettier)
+" let g:prettier#exec_cmd_async=1
+" let g:prettier#config#print_width=80
+" let g:prettier#config#tab_width=2
+" let g:prettier#config#use_tabs='false'
+" let g:prettier#config#semi='true'
+" let g:prettier#config#single_quote='false'
+" let g:prettier#config#bracket_spacing='true'
+" let g:prettier#config#jsx_bracket_same_line='false'
+" let g:prettier#config#trailing_comma='none'
+" let g:prettier#config#parser='babylon'
+" let g:prettier#config#config_precedence='prefer-file'
+" let g:prettier#config#prose_wrap='preserve'
+" let g:prettier#autoformat=0
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 
 " Ale linter
 let g:ale_set_highlights=0
@@ -374,28 +371,22 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*,*.git,*.hg,*.svn,*.DS_
 let g:ctrlp_use_caching = 0
 
 
-"importjs
-" <Leader>j 	:ImportJSWord 	Import the module for the variable under the cursor.
-" <Leader>i 	:ImportJSFix 	Import any missing modules and remove any modules that are not used.
-" <Leader>g 	:ImportJSGoto 	Go to the module of the variable under the cursor.
 
 " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 "
 "                      APPEARENCE
 " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
+" Select theme
+"colorscheme gruvbox
+colorscheme molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
 
 "set term=xterm
 set t_Co=256
 let &t_AB="\e[48;5;%dm"
 let &t_AF="\e[38;5;%dm"
 
-"colorscheme cobalt2
-
-" set best es6 javascript
-let g:material_terminal_italics = 1
-"let g:material_theme_style = 'default' | 'palenight' | 'ocean' | 'lighter' | 'darker'
-let g:material_theme_style = 'palenight'
-colorscheme material
 
 
 let python_highlight_all=1
@@ -403,15 +394,6 @@ let python_self_cls_highlight=1
 let python_no_operator_highlight=1
 "let python_no_parameter_highlight=1
 
-if has("gui_running")
-  "set guifont=Operator\ Mono: h18
-  set guifont=Input\ Mono: h18
-  set linespace=6
-  set guioptions -= r
-  colorscheme material
-  let g:material_theme_style='default' " 'palenight' | 'dark'
-  let g:material_terminal_italics=1
-endif
 
 if (has("nvim"))
   "For Neovim 0.1.3 and 0.1.4 < https: // github.com/neovim/neovim/pull/2198 >
