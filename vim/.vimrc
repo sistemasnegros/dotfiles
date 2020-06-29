@@ -119,7 +119,7 @@ set path+=**
 "set tags=./tags; /
 set encoding=UTF-8
 "set foldmethod=indent
-set signcolumn=yes
+"set signcolumn=yes
 
 
 " enable tags
