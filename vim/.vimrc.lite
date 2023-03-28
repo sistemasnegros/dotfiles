@@ -13,5 +13,5 @@ autocmd VimEnter * silent !echo -ne "\e[2 q"
 augroup END
 
 " force syntax
-au BufNewFile,BufRead,BufReadPost .env*,*.conf set syntax=bash
+au BufNewFile,BufRead *.conf,*.cf,.env* set syntax=sh
 
