@@ -1,23 +1,16 @@
 call plug#begin()
 
 " Auto complete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim'
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " menu file
 Plug 'scrooloose/nerdtree'
-
-Plug 'prettier/vim-prettier', {'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html']}
 
 " Linter
 Plug 'w0rp/ale'
 
 " Utils
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'SirVer/ultisnips'
 Plug 'junegunn/fzf', {'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
@@ -29,23 +22,13 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'ap/vim-buftabline'
 Plug 'easymotion/vim-easymotion'
 Plug 'cohama/lexima.vim'
-" Plug 'matze/vim-move'
-
-" Plug 'jiangmiao/auto-pairs'
-"Plug 'terryma/vim-multiple-cursors'
-"Plug 'junegunn/fzf'
 
 " Emmet
 Plug 'mattn/emmet-vim'
+
 "javascript
 Plug 'pangloss/vim-javascript'
-" Plug 'mxw/vim-jsx'
 Plug 'maxmellon/vim-jsx-pretty'
-
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-
-
-Plug 'carlitux/deoplete-ternjs', {'do': 'npm install -g tern'}
 
 " python
 Plug 'kh3phr3n/python-syntax'
@@ -54,7 +37,6 @@ Plug 'kh3phr3n/python-syntax'
 Plug 'GertjanReynaert/cobalt2-vim-theme'
 Plug 'altercation/vim-colors-solarized'
 Plug 'kaicataldo/material.vim'
-"Plug 'dracula/vim'
 Plug 'dracula/vim', {'as': 'dracula'}
 Plug 'patstockwell/vim-monokai-tasty'
 
@@ -63,9 +45,6 @@ Plug 'patstockwell/vim-monokai-tasty'
 Plug 'itchyny/lightline.vim'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-commentary'
-Plug 'Galooshi/vim-import-js'
-"Plug 'tpope/vim-surround'
-
 
 " Initialize plugin system
 call plug#end()
@@ -79,9 +58,9 @@ syntax on
 
 "runtime macros/matchit.vim
 
-" == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
-"                 GENERAL SETTINGS
-" == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
+" == == == == == == == == == == == == == == == == == == == =
+"   GENERAL SETTINGS
+" == == == == == == == == == == == == == == == == == == == =
 
 
 "set cursorline  " hihgli line current
@@ -132,9 +111,10 @@ set spelllang=en,es  " Corregir palabras usando diccionarios en inglés y españ
 " set noesckeys
 set ttimeout
 set ttimeoutlen=1
-set listchars=tab:>-,trail:~,extends:>,precedes:<,space:.
+"set listchars=tab:>-,trail:~,extends:>,precedes:<,space:.
 
-set list "show ocultos .
+"set list "show ocultos .
+set nolist "show ocultos .
 
 set ttyfast
 " set lazyredraw
@@ -151,9 +131,9 @@ set signcolumn=yes
 set laststatus=2
 
 
-" == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
-"                    AUTOCOMMANDS
-" == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
+" = == == == == == == == == == == == == == == == == == == =
+"   AUTOCOMMANDS
+" = == == == == == == == == == == == == == == == == == == =
 
 if has("autocmd")
   augroup vimrcEx
@@ -173,7 +153,7 @@ if has("autocmd")
     au BufNewFile,BufReadPost *.md set filetype=markdown
     au BufNewFile,BufReadPost *.vue syntax sync fromstart
 
-    autocmd FileType javascript set formatprg=prettier\ --stdin
+    " autocmd FileType javascript set formatprg=prettier\ --stdin
     "autocmd BufLeave,FocusLost * silent! wall
     autocmd filetype crontab setlocal nobackup nowritebackup
 
@@ -233,12 +213,6 @@ vnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>P "+P
 
-"Vim move
-"let g:move_key_modifier='C'
-"<C-k > Move current line/selections up
-"<C-j > Move current line/selections down
-
-
 nnoremap <C-Up> : move-2<CR>
 nnoremap <C-DOWN> : move+1<CR>
 
@@ -280,34 +254,27 @@ nnoremap <leader>a ggVG
 vnoremap > >gv
 vnoremap < <gv
 
+nnoremap gp :silent %!prettier --trailing-comma none --parser babel --stdin-filepath %<CR>
 
-"let g:lexima_enable_basic_rules=1
-" let g:lexima_enable_newline_rules=1
 
-" Use deoplete.
-let g:python3_host_prog='/usr/local/bin/python3.7'
-let g:deoplete#enable_at_startup=1
+"================================
+" Load Config Plugin
+"================================
+"
+" load config coc
+source ~/.config/nvim/configPlugin/coc.vim
 
-"deoplete-ternjs
+" visual-multi
+source ~/.config/nvim/configPlugin/vim-visual-multi.vim
 
-"Add extra filetypes
-let g:deoplete#sources#ternjs#filetypes = [
-                \ 'jsx',
-                \ 'javascript.jsx',
-                \ 'vue',
-                \ ]
+" Ale linter
+source ~/.config/nvim/configPlugin/ale.vim
+
+" Prettier
+"source ~/.config/nvim/configPlugin/prettier.vim
 
 " NERDTree
-"nnoremap <leader> q: NERDTreeToggle <CR>
-nnoremap <C-B> :NERDTreeToggle<CR>
-let g:NERDTreeWinSize=50
-let NERDTreeMinimalUI=1
-let NERDTreeShowLineNumbers=1
-let NERDTreeQuitOnOpen=1
-let NERDTreeHijackNetrw=0
-let NERDTreeIgnore=['\.pyc$','\~$'] "ignore files in NERDTree
-let NERDTreeShowHidden=1
-" autocmd BufWritePost * NERDTreeFocus | execute 'normal R' | wincmd p
+source ~/.config/nvim/configPlugin/nerdtree.vim
 
 " Lightline
 let g:lightline = { 'colorscheme': 'material_vim' }
@@ -344,67 +311,12 @@ let g:closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.js'
 let g:XkbSwitchLib='/usr/local/lib/libInputSourceSwitcher.dylib'
 let g:XkbSwitchEnabled=1
 
-" Prettier
-nmap <Leader>p <Plug>(Prettier)
-let g:prettier#exec_cmd_async=1
-let g:prettier#config#print_width=80
-let g:prettier#config#tab_width=2
-let g:prettier#config#use_tabs='false'
-let g:prettier#config#semi='true'
-let g:prettier#config#single_quote='false'
-let g:prettier#config#bracket_spacing='true'
-let g:prettier#config#jsx_bracket_same_line='false'
-let g:prettier#config#trailing_comma='none'
-let g:prettier#config#parser='babylon'
-let g:prettier#config#config_precedence='prefer-file'
-let g:prettier#config#prose_wrap='preserve'
-let g:prettier#autoformat=0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
-
-" Ale linter
-let g:ale_set_highlights=0
-"nmap <silent><Leader>nn<Plug>(ale_previous_wrap)
-"nmap <silent><Leader>np<Plug>(ale_next_wrap)
-let g:ale_linters={
-\   'javascript': ['eslint'],
-\   'ruby': [],
-\}
-let g:ale_sign_error='✘'
-let g:ale_sign_warning='⚠'
-" Check Python files with flake8 and pylint.
-"let b:ale_linters=['flake8', 'pylint']
-" Fix Python files with autopep8 and yapf.
-let b:ale_fixers={
-\  "python":['autopep8'],
-\}
-" Disable warnings about trailing whitespace for Python files.
-"let b:ale_warn_about_trailing_whitespace=0
-let g:ale_fix_on_save=1
-"let g:ale_lint_on_enter=0
-"let g:ale_lint_on_text_changed='never'
-"highlight ALEErrorSign ctermbg=NONE ctermfg=red
-"highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 
 
 " FZF
 nnoremap <leader>f :GFiles<CR>
 nnoremap <leader>t :Files<CR>
 nnoremap <leader>. :Buffers<CR>
-
-"vim-multiple-cursors
-"let g:multi_cursor_use_default_mapping=1
-
-" Default mappdding
-"let g:multi_cursor_start_word_key      = 'e'
-"let g:multi_cursor_select_all_word_key = '<A-n>'
-"let g:multi_cursor_start_key           = 'ge'
-"let g:multi_cursor_select_all_key      = 'g<A-n>'
-"let g:multi_cursor_next_key            = 'e'
-"let g:multi_cursor_prev_key            = '<C-p>'
-"let g:multi_cursor_skip_key            = '<C-x>'
-"let g:multi_cursor_quit_key            = '<Esc>'
-
-
 
 
 
@@ -416,14 +328,9 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*,*.git,*.hg,*.svn,*.DS_
 let g:ctrlp_use_caching = 0
 
 
-"importjs
-" <Leader>j 	:ImportJSWord 	Import the module for the variable under the cursor.
-" <Leader>i 	:ImportJSFix 	Import any missing modules and remove any modules that are not used.
-" <Leader>g 	:ImportJSGoto 	Go to the module of the variable under the cursor.
 
 " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
-"
-"                      APPEARENCE
+"   APPEARENCE
 " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 "set term=xterm
@@ -493,19 +400,6 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfun
 
- func! Multiple_cursors_before()
-      if deoplete#is_enabled()
-        call deoplete#disable()
-        let g:deoplete_is_enable_before_multi_cursors=1
-      else
-        let g:deoplete_is_enable_before_multi_cursors=0
-      endif
-    endfunc
-    func! Multiple_cursors_after()
-      if g:deoplete_is_enable_before_multi_cursors
-        call deoplete#enable()
-      endif
-    endfunc
 
 " Default highlighting (see help :highlight and help :highlight-link)
 highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
