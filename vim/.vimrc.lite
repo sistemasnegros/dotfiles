@@ -15,3 +15,5 @@ augroup END
 " force syntax
 au BufNewFile,BufRead *.conf,*.cf,.env* set syntax=sh
 
+" # vim: set syntax=bash:
+set modeline
